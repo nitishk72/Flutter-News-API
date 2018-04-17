@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:news_app/NewsCard.dart';
 
-final String API_KEY = "YOUR_API_KEY";
+final String API_KEY = "43dc7e323fc94b659ce4c7b70f7137d2";
 final String end_point = "https://newsapi.org/v2/";
 String apiURL(){
   String url = end_point+"top-headlines?sources=the-hindu&apiKey="+API_KEY;
