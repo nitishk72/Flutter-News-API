@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:news_app/NewsCard.dart';
 
 final String API_KEY = "43dc7e323fc94b659ce4c7b70f7137d2";
