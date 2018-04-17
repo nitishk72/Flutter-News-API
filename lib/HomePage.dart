@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:news_app/NewsCard.dart';
 
-final String API_KEY = "YOUR_KEY";
+final String API_KEY = "YOUR_API_KEY";
 final String end_point = "https://newsapi.org/v2/";
 String apiURL(){
   String url = end_point+"top-headlines?sources=the-hindu&apiKey="+API_KEY;
@@ -19,6 +19,13 @@ class HomePage extends StatefulWidget{
 class _HomePageState extends State<HomePage> {
   final List<NewsCard> _news = <NewsCard>[];
   var resBody;
+  bool loading = true;
+  Brightness bright = Brightness.light;
+  _toggle(bright){
+    setState(() {
+      this.bright = bright;
+    });
+  }
   getUserInfo() async {
     var res = await http
         .get(
@@ -41,25 +48,21 @@ class _HomePageState extends State<HomePage> {
         ));
       }
       setState(() {
+        loading = false;
         print("Loaded Data");
       });
     }else{
-      print("Something Went Wrong");
+      print("Something Went Wrong"+resBody);
     }
   }
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("News API App"),
-      ),
-      body: new Center(
-        child: new Column(
+  Widget _buildBody() {
+    if(loading){
+      return new Center(
+        child: new CircularProgressIndicator(),
+      );
+    }else{
+      return new Column(
           children: <Widget>[
-            new RaisedButton(
-                onPressed: getUserInfo,
-                child: new Text("Get data")
-            ),
             new Flexible(
                 child: new ListView.builder(
                   padding: new EdgeInsets.all(8.0),
@@ -69,21 +72,74 @@ class _HomePageState extends State<HomePage> {
                 )
             ),
           ],
-        )
+        );
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("News API App"),
+      ),
+      body: new Center(
+        child:_buildBody(),
       ),
       drawer: new Drawer(
         child: new ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
-            new ListTile(
-              title: new Text("Home"),
+            const DrawerHeader(
+                child: const Center(child: const Text('News API',style: TextStyle(fontSize: 22.0),))),
+            const ListTile(
+              title: const Text('Home'),
+              selected: true,
             ),
+            const ListTile(
+              title: const Text('Available Newspaper'),
+            ),
+            const Divider(),
+            new ListTile(
+              title: const Text('Light'),
+              trailing: new Radio(
+                value: "Light",
+                groupValue: "Brighness",
+                onChanged: null,
+              ),
+              onTap: () {
+                print("light");
+                _toggle(Brightness.light);
+                print(bright);
+              },
+            ),
+            new ListTile(
+              title: const Text('Dark'),
+              trailing: new Radio(
+                value: "Dark",
+                groupValue: "Brighness",
+                onChanged: null,
+              ),
+              onTap: () {
+                print("dark");
+                _toggle(Brightness.dark);
+                print(bright);
+              },
+            ),
+            const Divider(),
             new ListTile(
               title: new Text("Settings"),
             ),
-
+            new ListTile(
+              title: new Text("Share"),
+            ),
           ],
         ),
       ),
     );
   }
+  @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
 }

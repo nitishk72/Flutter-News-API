@@ -14,19 +14,16 @@ class NewsCard extends StatelessWidget{
             children: <Widget>[
               new Container(
                 margin: const EdgeInsets.only(right:16.0),
-                child: new Image.network(urlToImage,width: 80.0,),
+                child: new CircleAvatar(child: new Text(name[0]),)
               ),
               new Expanded(child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  new Text(title,style: TextStyle(fontSize: 20.0),),
-                  new Text(description),
-                  new Row(
-                    children: <Widget>[
-                      new Text(name+" : "),
-                      new Text(author),
-                    ],
-                  )
+                  new Container(
+                    child: new Text(title,style: TextStyle(fontSize: 18.0),),
+                    margin: EdgeInsets.only(bottom: 10.0),
+                  ),
+                  new Text(description)
                 ],
               ))
             ],
